@@ -54,10 +54,10 @@ func (s *Storage) GetBalancerInfo(balancer_id int64) (*Balancer, error) {
 	return &res, nil
 }
 
-func (s *Storage) UpdateMachine(machine_id int64, state bool) error {
-	if machine_id <= 0 {
+func (s *Storage) UpdateMachine(machineId int64, state bool) error {
+	if machineId <= 0 {
 		return fmt.Errorf("error: machine id is invalid")
 	}
-	_, err := s.Db.Exec("CALL update_machine($1, $2)", machine_id, state)
+	_, err := s.Db.Exec("CALL update_machine($1, $2)", machineId, state)
 	return err
 }
