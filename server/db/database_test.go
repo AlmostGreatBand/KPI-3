@@ -1,6 +1,9 @@
 package db
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestDatabaseConnection(t *testing.T) {
 	connection := &Connection {
@@ -10,7 +13,7 @@ func TestDatabaseConnection(t *testing.T) {
 		Host: "localhost",
 		DisableSSL: true,
 	}
-	if connection.ConnectionURL() != "postgres://balance_admin:3kpi@localhost/kpi3?sslmode=disable" {
+	if connection.ConnectionURL() != "lab3://balance_admin:3kpi@localhost/kpi3?sslmode=disable" {
 		t.Error("Unexpected connection string")
 	}
 }
