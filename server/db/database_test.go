@@ -1,9 +1,6 @@
 package db
 
-import (
-	"fmt"
-	"testing"
-)
+import "testing"
 
 func TestDatabaseConnection(t *testing.T) {
 	connection := &Connection {
