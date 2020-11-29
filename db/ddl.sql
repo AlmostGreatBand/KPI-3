@@ -13,7 +13,7 @@ drop table if exists machines;
 create table machines(
   id serial not null,
   balancer_id integer not null,
-  usable boolean not null default false
+  state boolean not null default false
 );
 alter table machines add constraint pk_machines primary key(id);
 

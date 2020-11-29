@@ -6,7 +6,7 @@ values ('balancer-a'),
        ('balancer-e'),
        ('balancer-f');
 
-insert into machines(balancer_id, usable)
+insert into machines(balancer_id, state)
 values (1, false),
        (2, true),
        (1, true),
