@@ -11,3 +11,11 @@ create or replace function get_usable_machines(balancer integer) returns setof i
 ' language sql;
 
 select get_usable_machines(3);
+
+create or replace procedure update_machine(machine_id integer, s bool) as '
+    update machines
+    set state = s
+    where id = machine_id
+' language sql;
+
+call update_machine(1, false);
