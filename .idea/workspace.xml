@@ -20,7 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1549b0ed-9aba-4b27-8039-82c7318609c2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/server/balancers/data.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/cmd/server/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/cmd/server/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/db/database_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/server/db/database_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +37,7 @@
       </list>
     </option>
   </component>
-  <component name="GOROOT" path="C:\Users\zasko\sdk\go1.15.2" />
+  <component name="GOROOT" path="E:\Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -59,6 +61,12 @@
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.goide.configuration.GoLibrariesConfigurableProvider" />
   </component>
   <component name="RecentsManager">
@@ -66,7 +74,7 @@
       <recent name="C:\Users\zasko\Desktop\go\KPI-3\server\cmd\server" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestDatabaseConnection in github.com/AlmostGreatBand/KPI-3/server/db">
+  <component name="RunManager" selected="Go Test.TestDatabaseConnection in github.com/AlmostGreatBand/KPI-3/server/db (1)">
     <configuration name="TestDatabaseConnection in database_test.go" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="KPI-3" />
       <working_directory value="$PROJECT_DIR$/server/db" />
@@ -74,6 +82,17 @@
       <kind value="FILE" />
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$/server/db/database_test.go" />
+      <pattern value="^\QTestDatabaseConnection\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestDatabaseConnection in github.com/AlmostGreatBand/KPI-3/server/db (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="KPI-3" />
+      <working_directory value="$PROJECT_DIR$/server/db" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="github.com/AlmostGreatBand/KPI-3/server/db" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
       <pattern value="^\QTestDatabaseConnection\E$" />
       <method v="2" />
     </configuration>
@@ -99,6 +118,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestDatabaseConnection in github.com/AlmostGreatBand/KPI-3/server/db (1)" />
         <item itemvalue="Go Test.TestDatabaseConnection in github.com/AlmostGreatBand/KPI-3/server/db" />
         <item itemvalue="Go Test.TestDatabaseConnection in database_test.go" />
         <item itemvalue="Go Test.database_test.go" />
@@ -128,6 +148,14 @@
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
+    <state x="752" y="451" key="#GOROOT" timestamp="1606661609836">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="752" y="451" key="#GOROOT/0.0.1920.1040@0.0.1920.1040" timestamp="1606661609836" />
+    <state x="586" y="198" key="#Inspections" timestamp="1606664336476">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="586" y="198" key="#Inspections/0.0.1920.1040@0.0.1920.1040" timestamp="1606664336476" />
     <state x="199" y="254" key="#SQL_Dialects" timestamp="1606655991668">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
