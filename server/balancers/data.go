@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-type Balancer struct {
+type BalancerResponse struct {
 	Id int64 `json:"id"`
 	Used []int64 `json:"usedMachines"`
 	Total int64 `json:"totalMachinesCount"`
@@ -19,9 +19,9 @@ func NewStorage(db *sql.DB) *Storage {
 	return &Storage{Db: db}
 }
 
-func (s *Storage) GetBalancerInfo(balancer_id int64) (*Balancer, error) {
-	quantity, err1 := s.Db.Query("SELECT get_machines_quantity($1)", balancer_id)
-	usable, err2 := s.Db.Query("SELECT get_usable_machines($1)", balancer_id)
+func (s *Storage) GetBalancerInfo(balancerId int64) (*BalancerResponse, error) {
+	quantity, err1 := s.Db.Query("SELECT get_machines_quantity($1)", balancerId)
+	usable, err2 := s.Db.Query("SELECT get_usable_machines($1)", balancerId)
 
 	if err1 != nil {
 		return nil, err1
@@ -35,7 +35,7 @@ func (s *Storage) GetBalancerInfo(balancer_id int64) (*Balancer, error) {
 	defer usable.Close()
 
 
-	res := Balancer{Id: balancer_id}
+	res := BalancerResponse{Id: balancerId}
 
 	for usable.Next() {
 		var c int64
