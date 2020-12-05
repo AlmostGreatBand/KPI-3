@@ -2,7 +2,7 @@ package balancers
 
 import (
 	"database/sql"
-	"fmt"
+	"errors"
 )
 
 type BalancerResponse struct {
@@ -56,7 +56,7 @@ func (s *Storage) GetBalancerInfo(balancerId int64) (*BalancerResponse, error) {
 
 func (s *Storage) UpdateMachine(machineId int64, state bool) error {
 	if machineId <= 0 {
-		return fmt.Errorf("error: machine id is invalid")
+		return errors.New("error: machine id is invalid")
 	}
 	_, err := s.Db.Exec("CALL update_machine($1, $2)", machineId, state)
 	return err
