@@ -1,34 +1,39 @@
 package db
 
 import (
-	"database/sql"
+	"context"
+	"github.com/jackc/pgx/v4/pgxpool"
+	"log"
 	"net/url"
-
-	_ "github.com/lib/pq"
 )
 
 type Connection struct {
-	DbName         string
+	DbName string
+	Schema string
 	User, Password string
-	Host           string
-	DisableSSL     bool
+	Host string
+	DisableSSL bool
 }
 
-func (c *Connection) ConnectionURL() string {
+func (c *Connection) ConnectionUrl() string {
 	dbUrl := &url.URL{
-		Scheme: "lab3",
+		Scheme: "postgres",
 		Host:   c.Host,
 		User:   url.UserPassword(c.User, c.Password),
 		Path:   c.DbName,
 	}
+	query := url.Values{}
 	if c.DisableSSL {
-		dbUrl.RawQuery = url.Values{
-			"sslmode": []string{"disable"},
-		}.Encode()
+		query.Set("sslmode", "disable")
 	}
+	query.Set("search_path", c.Schema)
+
+	dbUrl.RawQuery = query.Encode()
+	log.Println(dbUrl.String())
 	return dbUrl.String()
 }
 
-func (c *Connection) Open() (*sql.DB, error) {
-	return sql.Open("postgres", c.ConnectionURL())
+func (c *Connection) Open() (*pgxpool.Pool, error) {
+	db, err := pgxpool.Connect(context.Background(), c.ConnectionUrl())
+	return db, err
 }
