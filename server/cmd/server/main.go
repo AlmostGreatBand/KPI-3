@@ -1,9 +1,9 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
 	"github.com/AlmostGreatBand/KPI-3/server/db"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
 	"net/http"
 	"os"
@@ -12,11 +12,13 @@ import (
 
 var portNumber = flag.Int("p", 8080, "HTTP port number")
 
-func DatabaseConnection() (*sql.DB, error) {
+func DatabaseConnection() (*pgxpool.Pool, error) {
 	conn := &db.Connection{
-		DbName:     "chat-example",
-		User:       "roman",
-		Host:       "localhost",
+		DbName: "kpi3",
+		Schema: "lab3",
+		User: "balance_admin",
+		Password: "3kpi",
+		Host: "localhost",
 		DisableSSL: true,
 	}
 	return conn.Open()
@@ -27,10 +29,10 @@ func main() {
 
 	if server, err := ComposeApiServer(HttpPortNumber(*portNumber)); err == nil {
 		go func() {
-			log.Println("Start server")
+			log.Println("start server")
 			if err := server.StartServer(); err != nil {
 				if err == http.ErrServerClosed {
-					log.Println("error: server has stopped")
+					log.Println("server has stopped")
 				} else {
 					log.Fatalf("error: cannot start server: %s", err)
 				}

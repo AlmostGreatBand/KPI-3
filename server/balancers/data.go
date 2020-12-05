@@ -1,41 +1,71 @@
 package balancers
 
 import (
-	"database/sql"
+	"context"
 	"errors"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-type BalancerResponse struct {
+type Balancer struct {
 	Id int64 `json:"id"`
 	Used []int64 `json:"usedMachines"`
 	Total int64 `json:"totalMachinesCount"`
 }
 
 type Storage struct {
-	Db *sql.DB
+	Db *pgxpool.Pool
 }
 
-func NewStorage(db *sql.DB) *Storage {
+func NewStorage(db *pgxpool.Pool) *Storage {
 	return &Storage{Db: db}
 }
 
-func (s *Storage) GetBalancerInfo(balancerId int64) (*BalancerResponse, error) {
-	quantity, err1 := s.Db.Query("SELECT get_machines_quantity($1)", balancerId)
-	usable, err2 := s.Db.Query("SELECT get_usable_machines($1)", balancerId)
+func (s *Storage) GetBalancersInfo() ([]*Balancer, error) {
+	balancers, err := s.Db.Query(context.Background(), "SELECT get_balancers_id()")
+	if err != nil {
+		return nil, err
+	}
+	defer balancers.Close()
+
+	/*
+		I initialize empty slice here instead of nil declaration(via var)
+		because I want to return an empty array, not a null, if there are no balancers provided
+	*/
+	res := make([]*Balancer, 0, 0)
+
+	for balancers.Next() {
+		var balancerId int64
+		if err := balancers.Scan(&balancerId); err != nil {
+			return nil, err
+		}
+		el, err := s.getBalancerInfo(balancerId)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, el)
+	}
+	return res, nil
+}
+
+func (s *Storage) getBalancerInfo(balancerId int64) (*Balancer, error) {
+	res := Balancer{Id: balancerId, Used: make([]int64, 0)}
+
+	err1 := s.Db.QueryRow(
+		context.Background(),
+		"SELECT get_machines_quantity($1)",
+		balancerId,
+	).Scan(&res.Total)
 
 	if err1 != nil {
 		return nil, err1
 	}
 
+	usable, err2 := s.Db.Query(context.Background(),"SELECT get_usable_machines($1)", balancerId)
+
 	if err2 != nil {
 		return nil, err2
 	}
-
-	defer quantity.Close()
 	defer usable.Close()
-
-
-	res := BalancerResponse{Id: balancerId}
 
 	for usable.Next() {
 		var c int64
@@ -45,12 +75,6 @@ func (s *Storage) GetBalancerInfo(balancerId int64) (*BalancerResponse, error) {
 		res.Used = append(res.Used, c)
 	}
 
-	var q int64
-	if err := quantity.Scan(&q); err != nil {
-		return nil, err
-	}
-	res.Total = q
-
 	return &res, nil
 }
 
@@ -58,6 +82,6 @@ func (s *Storage) UpdateMachine(machineId int64, state bool) error {
 	if machineId <= 0 {
 		return errors.New("error: machine id is invalid")
 	}
-	_, err := s.Db.Exec("CALL update_machine($1, $2)", machineId, state)
+	_, err := s.Db.Exec(context.Background(),"CALL update_machine($1, $2)", machineId, state)
 	return err
 }
