@@ -6,6 +6,7 @@ alter database kpi3 owner to balance_admin;
 
 drop schema if exists lab3 cascade;
 create schema lab3;
+alter schema lab3 owner to balance_admin;
 
 set search_path to lab3;
 
@@ -16,6 +17,7 @@ create table machines(
   state boolean not null default false
 );
 alter table machines add constraint pk_machines primary key(id);
+alter table machines owner to balance_admin;
 
 drop table if exists balancers;
 create table balancers(
@@ -23,5 +25,6 @@ create table balancers(
     name varchar(255) not null
 );
 alter table balancers add constraint pk_balancers primary key(id);
+alter table balancers owner to balance_admin;
 
 alter table machines add constraint fk_machines_balancers foreign key(balancer_id) references balancers(id);
