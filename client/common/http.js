@@ -40,10 +40,9 @@ class Client {
             const code = res.statusCode.toString();
             if (code === '204') {
                 /*
-                    if in function we have only 'end' subscriber it won't be emitted
-                    so I add empty on end subscriber
+                    change readableFlowing to true mode with this line
                 */
-                res.on('data', () => {})
+                res.resume()
 
                 res.on('end', () => {
                     resolve(`Response code: ${code} - machine updated`)

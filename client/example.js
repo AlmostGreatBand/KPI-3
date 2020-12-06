@@ -27,3 +27,14 @@ const client = new Clients('localhost', 8080);
         console.log(err)
     }
 })();
+
+// Scenario 3: Update machine with invalid id
+(async () => {
+    try {
+        const result = await client.updateMachines(-3, true)
+        console.log('---Scenario 3---')
+        console.log(result)
+    } catch(err) {
+        console.log(err)
+    }
+})();
