@@ -2,18 +2,28 @@
 
 const Clients = require('./balancers/client');
 
-const client = new Clients('http://localhost:8080');
+const client = new Clients('localhost', 8080);
 
 // Scenario 1: Get info about balancers
-
-
 (async () => {
-    console.log('---Scenario 1---')
-    const transactions = await client.getBalancers()
-    transactions.forEach(balancer => {
-        console.log(balancer)
-    })
+    try {
+        const balancers = await client.getBalancers()
+        console.log('---Scenario 1---')
+        balancers.forEach(balancer => {
+            console.log(balancer)
+        })
+    } catch(err) {
+        console.log(err)
+    }
 })();
 
-
-// Scenario 2: Update machine state
+// Scenario 2: Update existed machine id
+(async () => {
+    try {
+        const result = await client.updateMachines(1, true)
+        console.log('---Scenario 2---')
+        console.log(result)
+    } catch(err) {
+        console.log(err)
+    }
+})();

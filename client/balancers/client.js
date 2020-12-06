@@ -3,16 +3,16 @@
 const Client = require('../common/http');
 
 class BalancerClient extends Client {
-    constructor(baseUrl) {
-        super(baseUrl);
+    constructor(baseUrl, port) {
+        super(baseUrl, port);
     }
 
-    getBalancers() {
-        return this.get('/balancers')
+    async getBalancers() {
+        return await this.get('/balancers')
     }
 
-    updateMachines(id, state) {
-        return this.put('/balancers', { id: id, state: state })
+    async updateMachines(id, state) {
+        return await this.put('/balancers', { id: id, state: state })
     }
 }
 
