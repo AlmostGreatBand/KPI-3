@@ -42,8 +42,12 @@ func handleUpdateMachine(r *http.Request, rw http.ResponseWriter, storage *Stora
 		return
 	}
 
-	err := storage.UpdateMachine(m.Id, m.State)
-	if err == nil {
+	if m.Id <= 0 {
+		utils.ResponseBadRequest(rw, "error: machine id is invalid")
+		return
+	}
+
+	if err := storage.UpdateMachine(m.Id, m.State); err == nil {
 		utils.ResponseOkNoBody(rw)
 	} else {
 		log.Printf("error: something went wrong while trying to update machine %s", err)

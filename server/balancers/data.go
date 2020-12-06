@@ -2,7 +2,6 @@ package balancers
 
 import (
 	"context"
-	"errors"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -79,9 +78,6 @@ func (s *Storage) getBalancerInfo(balancerId int64) (*Balancer, error) {
 }
 
 func (s *Storage) UpdateMachine(machineId int64, state bool) error {
-	if machineId <= 0 {
-		return errors.New("error: machine id is invalid")
-	}
 	_, err := s.Db.Exec(context.Background(),"CALL update_machine($1, $2)", machineId, state)
 	return err
 }
