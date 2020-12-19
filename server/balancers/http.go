@@ -15,7 +15,7 @@ type Machine struct {
 func HttpHandler(storage *Storage) http.HandlerFunc {
 	return func(rw http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
-			handleGetBalancerInfo(rw, storage)
+			handleGetBalancersInfo(rw, storage)
 		} else if r.Method == "PUT" {
 			handleUpdateMachine(r, rw, storage)
 		} else {
@@ -24,7 +24,7 @@ func HttpHandler(storage *Storage) http.HandlerFunc {
 	}
 }
 
-func handleGetBalancerInfo(rw http.ResponseWriter, storage *Storage) {
+func handleGetBalancersInfo(rw http.ResponseWriter, storage *Storage) {
 	res, err := storage.GetBalancersInfo()
 	if err == nil {
 		utils.ResponseOk(rw, res)
