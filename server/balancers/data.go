@@ -20,7 +20,7 @@ func NewStorage(db *pgxpool.Pool) *Storage {
 }
 
 func (s *Storage) GetBalancersInfo() ([]*Balancer, error) {
-	balancers, err := s.Db.Query(context.Background(), "SELECT get_balancers_id()")
+	balancers, err := s.Db.Query(context.Background(), "SELECT * FROM get_balancers_info()")
 	if err != nil {
 		return nil, err
 	}
@@ -28,53 +28,54 @@ func (s *Storage) GetBalancersInfo() ([]*Balancer, error) {
 
 	/*
 		I initialize empty slice here instead of nil declaration(via var)
-		because I want to return an empty array, not a null, if there are no balancers provided
+		because I want to return an empty array, not a nil, if there are no balancers provided
 	*/
 	res := make([]*Balancer, 0, 0)
 
+	usedMachines, err := s.getUsedMachines()
+	if err != nil {
+		return nil, err
+	}
+
 	for balancers.Next() {
 		var balancerId int64
-		if err := balancers.Scan(&balancerId); err != nil {
+		var count int64
+		if err := balancers.Scan(&balancerId, &count); err != nil {
 			return nil, err
 		}
-		el, err := s.getBalancerInfo(balancerId)
-		if err != nil {
-			return nil, err
+
+		/*
+			as with balancers - return empty slice instead of returning nil
+		*/
+		used := usedMachines[balancerId]
+		if used == nil {
+			used = make([]int64, 0)
 		}
+
+		el := &Balancer{Id: balancerId, Used: used, Total: count}
 		res = append(res, el)
 	}
 	return res, nil
 }
 
-func (s *Storage) getBalancerInfo(balancerId int64) (*Balancer, error) {
-	res := Balancer{Id: balancerId, Used: make([]int64, 0)}
-
-	err1 := s.Db.QueryRow(
-		context.Background(),
-		"SELECT get_machines_quantity($1)",
-		balancerId,
-	).Scan(&res.Total)
-
+func (s *Storage) getUsedMachines() (map[int64][]int64, error) {
+	usedMachines, err1 := s.Db.Query(context.Background(), "SELECT * FROM get_usable_machines()")
+	dividedUsedMachines := map[int64][]int64{}
 	if err1 != nil {
 		return nil, err1
 	}
+	defer usedMachines.Close()
 
-	usable, err2 := s.Db.Query(context.Background(),"SELECT get_usable_machines($1)", balancerId)
-
-	if err2 != nil {
-		return nil, err2
-	}
-	defer usable.Close()
-
-	for usable.Next() {
-		var c int64
-		if err := usable.Scan(&c); err != nil {
+	for usedMachines.Next() {
+		var balancerId int64
+		var machineId int64
+		if err := usedMachines.Scan(&balancerId, &machineId); err != nil {
 			return nil, err
 		}
-		res.Used = append(res.Used, c)
+		dividedUsedMachines[balancerId] = append(dividedUsedMachines[balancerId], machineId)
 	}
 
-	return &res, nil
+	return dividedUsedMachines, nil
 }
 
 func (s *Storage) UpdateMachine(machineId int64, state bool) error {
